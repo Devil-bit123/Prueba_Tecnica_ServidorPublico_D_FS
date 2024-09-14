@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Autor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class AutorController extends Controller
@@ -13,11 +14,26 @@ class AutorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
-        $autors = Autor::paginate(10);
-        return view('autor.index', compact('autors'));
+        // Obtener parámetros de filtrado y ordenamiento
+        $sortBy = $request->input('sort_by', 'id'); // Por defecto ordena por 'id'
+        $sortOrder = $request->input('sort_order', 'asc'); // Por defecto ordena de manera ascendente
+
+        // Filtrar por nombre si se proporciona un término de búsqueda
+        $search = $request->input('search');
+
+        // Construir la consulta
+        $query = Autor::query();
+
+        if ($search) {
+            $query->where('nombres', 'like', "%{$search}%");
+        }
+
+        $autors = $query->orderBy($sortBy, $sortOrder)->paginate(10);
+
+        return view('vendor.voyager.autors.browse', compact('autors', 'sortBy', 'sortOrder', 'search'));
     }
 
     /**
@@ -28,7 +44,8 @@ class AutorController extends Controller
     public function create()
     {
         //
-        return view('autor.create');
+        $method='P';
+        return view('vendor.voyager.autors.edit-add', compact('method'));
     }
 
     /**
@@ -40,6 +57,7 @@ class AutorController extends Controller
     public function store(Request $request)
     {
         try {
+            //dd($request);
             // Validación de los datos del request
             $validData = $request->validate(Autor::$rules);
 
@@ -47,11 +65,10 @@ class AutorController extends Controller
             $autor = Autor::create($validData);
 
             // Redirección en caso de éxito
-            return redirect()->route('autor.index')->with('success', 'El autor ha sido creado correctamente.');
-
+            return redirect()->route('autors.index')->with('success', 'El autor ha sido creado correctamente.');
         } catch (ValidationException $e) {
             // Captura los errores de validación y redirige con los errores
-            return redirect()->route('autor.index')->withErrors($e->errors())->withInput()->with('error', 'Ocurrió un error en la validación.');
+            return redirect()->route('autors.index')->withErrors($e->errors())->withInput()->with('error', 'Ocurrió un error en la validación.');
         }
     }
 
@@ -65,6 +82,7 @@ class AutorController extends Controller
     public function show(Autor $autor)
     {
         //
+        return view('vendor.voyager.autors.read',compact('autor'));
     }
 
     /**
@@ -76,7 +94,7 @@ class AutorController extends Controller
     public function edit(Autor $autor)
     {
         //
-        return view('autor.show', compact('autor'));
+        return view('vendor.voyager.autors.edit-add', compact('autor'));
     }
 
     /**
@@ -88,9 +106,29 @@ class AutorController extends Controller
      */
     public function update(Request $request, Autor $autor)
     {
-        //
-        dd('revisar la edicion apra ver que llega en reques y que en autor');
+
+        //dd($autor);
+        //dd($request);
+        try {
+            // Validación de los datos del request
+            $validData = $request->validate(Autor::$rules);
+
+            // Actualización del autor con los datos validados
+            $autor->update($validData);
+            $autor->nombres = $request->input('nombres');
+            $autor->fechaNacimiento = $request->input('fechaNacimiento');
+            $autor->save();
+            // Redirección en caso de éxito
+            return redirect()->route('autors.index')->with('success', 'El autor ha sido editado correctamente.');
+        } catch (ValidationException $e) {
+            // Captura los errores de validación y redirige con los errores
+            return redirect()->route('autors.edit', $autor->id)
+                             ->withErrors($e->errors())
+                             ->withInput()
+                             ->with('error', 'Ocurrió un error en la validación.');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -98,10 +136,26 @@ class AutorController extends Controller
      * @param  \App\Models\Autor  $autor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Autor $autor)
+    public function destroy(Request $request, Autor $autor)
     {
-        //
-        $autor->delete();
-        return view('autor.index');
+        try {
+            // Elimina el autor
+            $autor->delete();
+
+            // Redirige a la ruta 'autors.index' con los mismos parámetros de consulta
+            return redirect()->route('autors.index', [
+                'sort_by' => $request->input('sort_by', 'id'),
+                'sort_order' => $request->input('sort_order', 'asc'),
+                'search' => $request->input('search', '')
+            ])->with('success', 'Autor eliminado correctamente.');
+        } catch (\Exception $e) {
+            // Redirige con un mensaje de error en caso de fallo
+            return redirect()->route('autors.index', [
+                'sort_by' => $request->input('sort_by', 'id'),
+                'sort_order' => $request->input('sort_order', 'asc'),
+                'search' => $request->input('search', '')
+            ])->with('error', 'Ocurrió un error al eliminar el autor.');
+        }
     }
+
 }

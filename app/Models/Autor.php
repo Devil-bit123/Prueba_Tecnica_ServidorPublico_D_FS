@@ -12,19 +12,18 @@ class Autor extends Model
     protected $table = 'autors';
 
     static $rules=[
-        'nombres'=>['required'],
-        'fechaNacimiento'=>['required|date:Y-m-d'],
+        'nombres'=>'required',
+        'fechaNacimiento'=>'required|date_format:Y-m-d|before:today',
     ];
 
     protected $fillable = [
-        'nombre',
-        'fecha_nacimiento',
+        'nombres',
+        'fechaNacimiento',
     ];
 
     public function libros()
     {
         return $this->hasMany(Libro::class, 'autor_id');
     }
-
 
 }
