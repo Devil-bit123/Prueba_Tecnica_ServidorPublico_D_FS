@@ -44,7 +44,7 @@ class AutorController extends Controller
     public function create()
     {
         //
-        $method='P';
+        $method = 'P';
         return view('vendor.voyager.autors.edit-add', compact('method'));
     }
 
@@ -82,7 +82,7 @@ class AutorController extends Controller
     public function show(Autor $autor)
     {
         //
-        return view('vendor.voyager.autors.read',compact('autor'));
+        return view('vendor.voyager.autors.read', compact('autor'));
     }
 
     /**
@@ -123,9 +123,9 @@ class AutorController extends Controller
         } catch (ValidationException $e) {
             // Captura los errores de validación y redirige con los errores
             return redirect()->route('autors.edit', $autor->id)
-                             ->withErrors($e->errors())
-                             ->withInput()
-                             ->with('error', 'Ocurrió un error en la validación.');
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('error', 'Ocurrió un error en la validación.');
         }
     }
 
@@ -157,5 +157,4 @@ class AutorController extends Controller
             ])->with('error', 'Ocurrió un error al eliminar el autor.');
         }
     }
-
 }

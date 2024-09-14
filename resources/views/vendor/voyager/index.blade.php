@@ -4,10 +4,10 @@
     <div class="page-content">
         @include('voyager::alerts')
         @include('voyager::dimmers')
-        <div class="analytics-container">
-            <?php $google_analytics_client_id = Voyager::setting("admin.google_analytics_client_id"); ?>
+        {{-- <div class="analytics-container">
+
             @if (isset($google_analytics_client_id) && !empty($google_analytics_client_id))
-                {{-- Google Analytics Embed --}}
+
                 <div id="embed-api-auth-container"></div>
             @else
                 <p style="border-radius:4px; padding:20px; background:#fff; margin:0; color:#999; text-align:center;">
@@ -16,6 +16,7 @@
                 </p>
             @endif
 
+            hola
             <div class="Dashboard Dashboard--full" id="analytics-dashboard">
                 <header class="Dashboard-header">
                     <ul class="FlexGrid">
@@ -75,7 +76,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> --}}
     </div>
 @stop
 

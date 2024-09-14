@@ -17,7 +17,7 @@ class CreateLibrosTable extends Migration
             $table->id();
             $table->string('titulo');
             $table->unsignedBigInteger('autor_id');
-            $table->integer('anio');
+            $table->date('anio');
             $table->string('genero');
             $table->string('idioma');
             $table->text('descripcion')->nullable();

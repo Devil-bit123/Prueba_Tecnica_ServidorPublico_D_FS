@@ -73,6 +73,9 @@
                                 </a>
                             </th>
                             <th scope="col">
+                                Libros
+                            </th>
+                            <th scope="col">
                                 Acciones
                             </th>
 
@@ -84,6 +87,18 @@
                                 <td>{{ $autor->id }}</td>
                                 <td>{{ $autor->nombres }}</td>
                                 <td>{{ $autor->fechaNacimiento }}</td>
+                                <td>
+                                    @if ($autor->libros->isNotEmpty())
+                                        @foreach ($autor->libros as $libro)
+                                            <p>{{ $libro->titulo }}</p>
+                                        @endforeach
+                                    @else
+                                        <strong>
+                                            <p>Aún no se ha asignado un libro a este autor</p>
+                                        </strong>
+                                    @endif
+                                </td>
+
                                 <td>
 
                                     @can('check_permission', 'read_autors')
@@ -147,20 +162,19 @@
 @endsection
 
 @section('javascript')
-<script>
-    // Escucha el evento de apertura del modal
-    $('#myModal').on('show.bs.modal', function (event) {
-        // Obtén el botón que activó el modal
-        var button = $(event.relatedTarget);
-        // Obtén el ID del autor desde el atributo data-id
-        var autorId = button.data('id');
-        // Construye la URL para la eliminación
-        var actionUrl = '{{ route("autors.delete", ":id") }}';
-        actionUrl = actionUrl.replace(':id', autorId);
-        // Establece la URL de acción del formulario
-        var form = $(this).find('form');
-        form.attr('action', actionUrl);
-    });
-</script>
-
+    <script>
+        // Escucha el evento de apertura del modal
+        $('#myModal').on('show.bs.modal', function(event) {
+            // Obtén el botón que activó el modal
+            var button = $(event.relatedTarget);
+            // Obtén el ID del autor desde el atributo data-id
+            var autorId = button.data('id');
+            // Construye la URL para la eliminación
+            var actionUrl = '{{ route('autors.delete', ':id') }}';
+            actionUrl = actionUrl.replace(':id', autorId);
+            // Establece la URL de acción del formulario
+            var form = $(this).find('form');
+            form.attr('action', actionUrl);
+        });
+    </script>
 @endsection
