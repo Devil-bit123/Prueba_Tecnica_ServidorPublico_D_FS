@@ -22,13 +22,17 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 
+    Route::group(['prefix' => 'autores'], function () {
+
     //Autores
-    Route::get('/autores', [AutorController::class, 'index'])->name('autors.index');
-    Route::get('/autores/create', [AutorController::class, 'create'])->name('autors.create');
-    Route::post('/autores/store', [AutorController::class, 'store'])->name('autors.store');
-    Route::get('/autores/show/{autor}', [AutorController::class, 'show'])->name('autors.read');
-    Route::get('/autores/edit/{autor}', [AutorController::class, 'edit'])->name('autors.edit');
-    Route::put('/autores/update/{autor}', [AutorController::class, 'update'])->name('autors.update');
-    Route::delete('/autores/delete/{autor}', [AutorController::class, 'destroy'])->name('autors.delete');
+    Route::get('/', [AutorController::class, 'index'])->name('autors.index');
+    Route::get('/create', [AutorController::class, 'create'])->name('autors.create');
+    Route::post('/store', [AutorController::class, 'store'])->name('autors.store');
+    Route::get('/show/{autor}', [AutorController::class, 'show'])->name('autors.read');
+    Route::get('/edit/{autor}', [AutorController::class, 'edit'])->name('autors.edit');
+    Route::put('/update/{autor}', [AutorController::class, 'update'])->name('autors.update');
+    Route::delete('/delete/{autor}', [AutorController::class, 'destroy'])->name('autors.delete');
+
+    });
 
 });
