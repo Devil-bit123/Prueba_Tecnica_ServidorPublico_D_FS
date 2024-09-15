@@ -13,24 +13,42 @@ class CovidDashboardViewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        // //
-        // $dashboard=CovidDashboardView::firstOrDefault();
-        // $response = Http::get($dashboard->url);
-        //  if ($response->successful()) {
-        //     // Obtener los datos de la respuesta
-        //     $data = $response->json();
+        // Intentar obtener la primera instancia del dashboard, si no se encuentra, manejar el error.
+        $dashboard = CovidDashboardView::first();
 
-        //     return view('');
-        //     // Retornar la vista con la data data o hacer algo con ella
+        // Verificar si el dashboard existe y tiene una URL válida
+        if (!$dashboard || empty($dashboard->url)) {
+            return view('vendor.voyager.covid-dashboard-views.browse')
+                ->withErrors('No se encontró un dashboard o la URL es inválida.');
+        }
 
-        // } else {
-        //     // Manejar el error
-        //     // Retornar la vista con la error data o hacer algo con ella
-        //     return view('');
-        // }
+        try {
+            // Hacer la solicitud GET a la URL del dashboard
+            $response = Http::get($dashboard->url);
+
+            // Verificar si la solicitud fue exitosa
+            if ($response->successful()) {
+                // Obtener los datos de la respuesta
+                $data = $response->json();
+
+                // Retornar la vista con los datos obtenidos
+                return view('vendor.voyager.covid-dashboard-views.browse', ['data' => $data]);
+            } else {
+                // Manejar el error específico de la solicitud
+                return view('vendor.voyager.covid-dashboard-views.browse')
+                    ->withErrors('Error al obtener datos de la API. Código de estado: ' . $response->status());
+            }
+        } catch (\Exception $e) {
+            // Manejar cualquier excepción (como problemas de conexión o tiempos de espera)
+            return view('vendor.voyager.covid-dashboard-views.browse')
+                ->withErrors('Hubo un problema al conectarse a la API: ' . $e->getMessage());
+        }
     }
+
+
 
     /**
      * Show the form for creating a new resource.

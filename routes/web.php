@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\CovidDashboardViewController;
 use App\Http\Controllers\LibroController;
 use App\Models\Libro;
 
@@ -35,17 +36,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/delete/{autor}', [AutorController::class, 'destroy'])->name('autors.delete');
     });
 
-    // Route::group(['prefix' => 'libros'], function () {
-    //     //Autores
-    //     Route::get('/', [LibroController::class, 'index'])->name('libros.index');
-    //     Route::get('/create', [LibroController::class, 'create'])->name('libros.create');
-    //     Route::post('/store', [LibroController::class, 'store'])->name('libros.store');
-    //     Route::get('/show/{libro}', [LibroController::class, 'show'])->name('libros.read');
-    //     Route::get('/edit/{libro}', [LibroController::class, 'edit'])->name('libros.edit');
-    //     Route::put('/update/{libro}', [LibroController::class, 'update'])->name('libros.update');
-    //     Route::delete('/delete/{libro}', [LibroController::class, 'destroy'])->name('libros.delete');
-    // });
-
     Route::group(['prefix' => 'libros'], function () {
         Route::get('/', [LibroController::class, 'index'])->name('voyager.libros.index');
         Route::get('/create', [LibroController::class, 'create'])->name('voyager.libros.create');
@@ -56,6 +46,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/delete/{libro}', [LibroController::class, 'destroy'])->name('voyager.libros.delete');
     });
 
+    Route::group(['prefix' => 'covid-dashboard'], function () {
+        Route::get('/', [CovidDashboardViewController::class, 'index'])->name('voyager.covid-dashboard-views.index');
+    });
 
 
 });
