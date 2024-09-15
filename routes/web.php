@@ -21,6 +21,9 @@ Route::get('/', function () {
     return redirect('/admin');
 });
 
+Route::get('/login', function () {
+    return redirect('/admin'); // Asegúrate de que tienes una vista de inicio de sesión
+})->name('login');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
