@@ -12,12 +12,12 @@ class Libro extends Model
     protected $table = 'libros';
 
     static $rules = [
-        'titulo',
-        'autor_id',
-        'anio',
-        'genero',
-        'idioma',
-        'descripcion',
+        'titulo' => 'required',
+        'autor_id' => 'required',
+        'anio' => 'required|date_format:Y-m-d|before:today',
+        'genero' => 'required',
+        'idioma' => 'required',
+        'descripcion' => 'nullable',
     ];
 
     protected $fillable = [
@@ -33,5 +33,4 @@ class Libro extends Model
     {
         return $this->belongsTo(Autor::class, 'autor_id');
     }
-
 }
