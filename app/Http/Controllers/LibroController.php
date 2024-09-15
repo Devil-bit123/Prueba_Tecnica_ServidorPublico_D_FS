@@ -21,9 +21,11 @@ class LibroController extends Controller
         // Filtro de búsqueda
         $search = $request->input('search');
         $filter = $request->input('filter');
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
 
-        if ($search && $filter) {
-            if ($filter == 'autor') {
+        if ($search) {
+            if ($filter === 'autor') {
                 $query->whereHas('autor', function ($q) use ($search) {
                     $q->where('nombres', 'like', "%{$search}%");
                 });
@@ -33,11 +35,7 @@ class LibroController extends Controller
         }
 
         // Ordenamiento
-        $sort = $request->input('sort', 'id'); // Ordenar por 'id' de manera predeterminada
-        $direction = $request->input('direction', 'asc'); // Dirección predeterminada 'asc'
-
-        // Si se selecciona 'autor', ordenar por el nombre del autor
-        if ($sort == 'autor') {
+        if ($sort === 'autor') {
             $query->join('autors', 'libros.autor_id', '=', 'autors.id')
                 ->orderBy('autors.nombres', $direction);
         } else {
@@ -47,9 +45,8 @@ class LibroController extends Controller
         // Obtener los resultados
         $libros = $query->paginate(10);
 
-        return view('vendor.voyager.libros.browse', compact('libros', 'search'));
+        return view('vendor.voyager.libros.browse', compact('libros', 'search', 'filter', 'sort', 'direction'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -58,10 +55,11 @@ class LibroController extends Controller
      */
     public function create()
     {
-        //
-        $method = 'P';
         $autors = Autor::all();
-        return view('vendor.voyager.libros.edit-add', compact('method', 'autors'));
+        return view('vendor.voyager.libros.edit-add', [
+            'method' => 'P',
+            'autors' => $autors
+        ]);
     }
 
     /**
@@ -72,17 +70,13 @@ class LibroController extends Controller
      */
     public function store(Request $request)
     {
-        //
         try {
-            // Validación de los datos del request
             $validData = $request->validate(Libro::$rules);
+            Libro::create($validData);
 
-            $libro = Libro::create($validData);
-
-            // Redirección en caso de éxito
-            return redirect()->route('voyager.libros.index')->with('success', 'El libro ha sido editado correctamente.');
+            return redirect()->route('voyager.libros.index')
+                ->with('success', 'El libro ha sido creado correctamente.');
         } catch (ValidationException $e) {
-            // Manejo de errores de validación
             return redirect()->route('voyager.libros.index')
                 ->withErrors($e->errors())
                 ->withInput()
@@ -98,7 +92,6 @@ class LibroController extends Controller
      */
     public function show(Libro $libro)
     {
-        //
         return view('vendor.voyager.libros.read', compact('libro'));
     }
 
@@ -110,9 +103,11 @@ class LibroController extends Controller
      */
     public function edit(Libro $libro)
     {
-        //
         $autors = Autor::all();
-        return view('vendor.voyager.libros.edit-add', compact('libro', 'autors'));
+        return view('vendor.voyager.libros.edit-add', [
+            'libro' => $libro,
+            'autors' => $autors
+        ]);
     }
 
     /**
@@ -122,37 +117,21 @@ class LibroController extends Controller
      * @param  \App\Models\Libro  $libro
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, Libro $libro)
     {
         try {
-            // Validación de los datos del request
             $validData = $request->validate(Libro::$rules);
+            $libro->update($validData);
 
-            // Actualización de los atributos del libro
-            $libro->titulo = $request->input('titulo');
-            $libro->anio = $request->input('anio');
-            $libro->genero = $request->input('genero');
-            $libro->idioma = $request->input('idioma');
-            $libro->descripcion = $request->input('descripcion');
-
-            // Actualización del autor (clave foránea)
-            $libro->autor_id = $request->input('autor_id'); // Asumiendo que tienes un campo autor_id en la tabla libros
-
-            // Guardar los cambios
-            $libro->save();
-
-            // Redirección en caso de éxito
-            return redirect()->route('voyager.libros.index')->with('success', 'El libro ha sido editado correctamente.');
+            return redirect()->route('voyager.libros.index')
+                ->with('success', 'El libro ha sido editado correctamente.');
         } catch (ValidationException $e) {
-            // Manejo de errores de validación
             return redirect()->route('voyager.libros.edit', $libro->id)
                 ->withErrors($e->errors())
                 ->withInput()
                 ->with('error', 'Ocurrió un error en la validación.');
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -163,22 +142,13 @@ class LibroController extends Controller
     public function destroy(Request $request, Libro $libro)
     {
         try {
-            // Elimina el autor
             $libro->delete();
 
-            // Redirige a la ruta 'autors.index' con los mismos parámetros de consulta
-            return redirect()->route('voyager.libros.index', [
-                'sort_by' => $request->input('sort_by', 'id'),
-                'sort_order' => $request->input('sort_order', 'asc'),
-                'search' => $request->input('search', '')
-            ])->with('success', 'Autor eliminado correctamente.');
+            return redirect()->route('voyager.libros.index', $request->only(['sort', 'direction', 'search']))
+                ->with('success', 'El libro ha sido eliminado correctamente.');
         } catch (\Exception $e) {
-            // Redirige con un mensaje de error en caso de fallo
-            return redirect()->route('voyager.libros.index', [
-                'sort_by' => $request->input('sort_by', 'id'),
-                'sort_order' => $request->input('sort_order', 'asc'),
-                'search' => $request->input('search', '')
-            ])->with('error', 'Ocurrió un error al eliminar el autor.');
+            return redirect()->route('voyager.libros.index', $request->only(['sort', 'direction', 'search']))
+                ->with('error', 'Ocurrió un error al eliminar el libro.');
         }
     }
 }
