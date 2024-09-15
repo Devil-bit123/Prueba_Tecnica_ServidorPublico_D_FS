@@ -2,6 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AutorController;
+use App\Http\Controllers\LibroController;
+use App\Http\Controllers\AuthApiController;
+use App\Http\Controllers\ModulesController;
+use App\Http\Controllers\AutorApiController;
+use App\Http\Controllers\CovidDashboardViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +23,37 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post('register', [AuthApiController::class, 'register']);
+
+Route::post('login', [AuthApiController::class, 'login']);
+
+Route::middleware('auth:sanctum')->post('/logout', [AuthApiController::class, 'logout']);
+
+Route::group(['prefix' => 'autores', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/', [AutorApiController::class, 'index'])->name('api.autors.index');
+    Route::post('/', [AutorApiController::class, 'store'])->name('api.autors.store');
+    Route::get('/{autor}', [AutorApiController::class, 'show'])->name('api.autors.show');
+    Route::put('/{autor}', [AutorApiController::class, 'update'])->name('api.autors.update');
+    Route::delete('/{autor}', [AutorApiController::class, 'destroy'])->name('api.autors.destroy');
+});
+
+Route::group(['prefix' => 'libros', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/', [LibroController::class, 'index'])->name('api.libros.index');
+    Route::post('/', [LibroController::class, 'store'])->name('api.libros.store');
+    Route::get('/{libro}', [LibroController::class, 'show'])->name('api.libros.show');
+    Route::put('/{libro}', [LibroController::class, 'update'])->name('api.libros.update');
+    Route::delete('/{libro}', [LibroController::class, 'destroy'])->name('api.libros.destroy');
+});
+
+Route::group(['prefix' => 'covid-dashboard', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/', [CovidDashboardViewController::class, 'index'])->name('api.covid-dashboard.index');
+});
+
+
+Route::group(['prefix' => 'modules', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/', [ModulesController::class, 'index'])->name('api.modules.index');
+});
+
+
