@@ -80,10 +80,10 @@ class LibroController extends Controller
             $libro = Libro::create($validData);
 
             // Redirección en caso de éxito
-            return redirect()->route('libros.index')->with('success', 'El libro ha sido editado correctamente.');
+            return redirect()->route('voyager.libros.index')->with('success', 'El libro ha sido editado correctamente.');
         } catch (ValidationException $e) {
             // Manejo de errores de validación
-            return redirect()->route('libros.index')
+            return redirect()->route('voyager.libros.index')
                 ->withErrors($e->errors())
                 ->withInput()
                 ->with('error', 'Ocurrió un error en la validación.');
@@ -143,10 +143,10 @@ class LibroController extends Controller
             $libro->save();
 
             // Redirección en caso de éxito
-            return redirect()->route('libros.index')->with('success', 'El libro ha sido editado correctamente.');
+            return redirect()->route('voyager.libros.index')->with('success', 'El libro ha sido editado correctamente.');
         } catch (ValidationException $e) {
             // Manejo de errores de validación
-            return redirect()->route('libros.edit', $libro->id)
+            return redirect()->route('voyager.libros.edit', $libro->id)
                 ->withErrors($e->errors())
                 ->withInput()
                 ->with('error', 'Ocurrió un error en la validación.');
@@ -167,14 +167,14 @@ class LibroController extends Controller
             $libro->delete();
 
             // Redirige a la ruta 'autors.index' con los mismos parámetros de consulta
-            return redirect()->route('libros.index', [
+            return redirect()->route('voyager.libros.index', [
                 'sort_by' => $request->input('sort_by', 'id'),
                 'sort_order' => $request->input('sort_order', 'asc'),
                 'search' => $request->input('search', '')
             ])->with('success', 'Autor eliminado correctamente.');
         } catch (\Exception $e) {
             // Redirige con un mensaje de error en caso de fallo
-            return redirect()->route('libros.index', [
+            return redirect()->route('voyager.libros.index', [
                 'sort_by' => $request->input('sort_by', 'id'),
                 'sort_order' => $request->input('sort_order', 'asc'),
                 'search' => $request->input('search', '')

@@ -35,14 +35,27 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/delete/{autor}', [AutorController::class, 'destroy'])->name('autors.delete');
     });
 
+    // Route::group(['prefix' => 'libros'], function () {
+    //     //Autores
+    //     Route::get('/', [LibroController::class, 'index'])->name('libros.index');
+    //     Route::get('/create', [LibroController::class, 'create'])->name('libros.create');
+    //     Route::post('/store', [LibroController::class, 'store'])->name('libros.store');
+    //     Route::get('/show/{libro}', [LibroController::class, 'show'])->name('libros.read');
+    //     Route::get('/edit/{libro}', [LibroController::class, 'edit'])->name('libros.edit');
+    //     Route::put('/update/{libro}', [LibroController::class, 'update'])->name('libros.update');
+    //     Route::delete('/delete/{libro}', [LibroController::class, 'destroy'])->name('libros.delete');
+    // });
+
     Route::group(['prefix' => 'libros'], function () {
-        //Autores
-        Route::get('/', [LibroController::class, 'index'])->name('libros.index');
-        Route::get('/create', [LibroController::class, 'create'])->name('libros.create');
-        Route::post('/store', [LibroController::class, 'store'])->name('libros.store');
-        Route::get('/show/{libro}', [LibroController::class, 'show'])->name('libros.read');
-        Route::get('/edit/{libro}', [LibroController::class, 'edit'])->name('libros.edit');
-        Route::put('/update/{libro}', [LibroController::class, 'update'])->name('libros.update');
-        Route::delete('/delete/{libro}', [LibroController::class, 'destroy'])->name('libros.delete');
+        Route::get('/', [LibroController::class, 'index'])->name('voyager.libros.index');
+        Route::get('/create', [LibroController::class, 'create'])->name('voyager.libros.create');
+        Route::post('/store', [LibroController::class, 'store'])->name('voyager.libros.store');
+        Route::get('/show/{libro}', [LibroController::class, 'show'])->name('voyager.libros.read');
+        Route::get('/edit/{libro}', [LibroController::class, 'edit'])->name('voyager.libros.edit');
+        Route::put('/update/{libro}', [LibroController::class, 'update'])->name('voyager.libros.update');
+        Route::delete('/delete/{libro}', [LibroController::class, 'destroy'])->name('voyager.libros.delete');
     });
+
+
+
 });

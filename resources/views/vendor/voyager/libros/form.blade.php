@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="col-auto">
-                                <a style="text-decoration: none" href="{{ route('libros.index') }}" type="button"
+                                <a style="text-decoration: none" href="{{ route('voyager.libros.index') }}" type="button"
                                     class="btn btn-info">Regresar</a>
                             </div>
                         </form>
@@ -80,7 +80,7 @@
                     @case('U')
                         <h5 class="card-title">Editar {{ $libro->titulo }}</h5>
 
-                        <form class="row g-3" action="{{ route('libros.update', $libro->id) }}" method="POST">
+                        <form class="row g-3" action="{{ route('voyager.libros.update', $libro->id) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="col-auto">
@@ -128,7 +128,7 @@
 
                             <div class="col-auto">
                                 <button style="text-decoration: none" type="submit" class="btn btn-warning">Editar</button>
-                                <a style="text-decoration: none" href="{{ route('libros.index') }}" type="button"
+                                <a style="text-decoration: none" href="{{ route('voyager.libros.index') }}" type="button"
                                     class="btn btn-info">Regresar</a>
                             </div>
                         </form>
@@ -136,7 +136,7 @@
 
                     @default
                         <h5 class="card-title">Agregar autor</h5>
-                        <form class="row g-3" action="{{ route('libros.store') }}" method="POST">
+                        <form class="row g-3" action="{{ route('voyager.libros.store') }}" method="POST">
                             @csrf
                             @method('POST')
                             <div class="col-auto">
@@ -180,7 +180,7 @@
 
                             <div class="col-auto">
                                 <button style="text-decoration: none" type="submit" class="btn btn-warning">Agregar</button>
-                                <a style="text-decoration: none" href="{{ route('libros.index') }}" type="button"
+                                <a style="text-decoration: none" href="{{ route('voyager.libros.index') }}" type="button"
                                     class="btn btn-info">Regresar</a>
                             </div>
                         </form>

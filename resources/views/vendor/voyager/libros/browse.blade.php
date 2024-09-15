@@ -29,7 +29,7 @@
             <div class="card-body">
                 <h5 class="card-title">Autores</h5>
                 <!-- Formulario de búsqueda -->
-                <form method="GET" action="{{ route('libros.index') }}" class="mb-3">
+                <form method="GET" action="{{ route('voyager.libros.index') }}" class="mb-3">
 
                     <div style="display: flex; flex-direction:row">
                         <select class="form-select" class="form-control" name="filter" required>
@@ -42,11 +42,11 @@
                         <input type="text" name="search" required class="form-control" placeholder="Filtro">
                     </div>
                     <button type="submit" class="btn btn-primary">Buscar</button>
-                    <a href="{{ route('libros.index') }}" class="btn btn-warning">Borrar filtros</a>
+                    <a href="{{ route('voyager.libros.index') }}" class="btn btn-warning">Borrar filtros</a>
                 </form>
 
                 @can('check_permission', 'add_libros')
-                    <a style="text-decoration: none" href="{{ route('libros.create') }}" type="button"
+                    <a style="text-decoration: none" href="{{ route('voyager.libros.create') }}" type="button"
                         class="btn btn-info">Crear</a>
                 @endcan
 
@@ -55,7 +55,7 @@
                         <tr>
                             <th scope="col">
                                 <a
-                                    href="{{ route('libros.index', ['sort' => 'id', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    href="{{ route('voyager.libros.index', ['sort' => 'id', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                     #
                                     @if (request('sort') == 'id')
                                         <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
@@ -64,7 +64,7 @@
                             </th>
                             <th scope="col">
                                 <a
-                                    href="{{ route('libros.index', ['sort' => 'titulo', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    href="{{ route('voyager.libros.index', ['sort' => 'titulo', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                     Título
                                     @if (request('sort') == 'titulo')
                                         <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
@@ -73,7 +73,7 @@
                             </th>
                             <th scope="col">
                                 <a
-                                    href="{{ route('libros.index', ['sort' => 'autor', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    href="{{ route('voyager.libros.index', ['sort' => 'autor', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                     Autor
                                     @if (request('sort') == 'autor')
                                         <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
@@ -82,7 +82,7 @@
                             </th>
                             <th scope="col">
                                 <a
-                                    href="{{ route('libros.index', ['sort' => 'anio', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    href="{{ route('voyager.libros.index', ['sort' => 'anio', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                     Año
                                     @if (request('sort') == 'anio')
                                         <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
@@ -91,7 +91,7 @@
                             </th>
                             <th scope="col">
                                 <a
-                                    href="{{ route('libros.index', ['sort' => 'genero', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    href="{{ route('voyager.libros.index', ['sort' => 'genero', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                     Genero
                                     @if (request('sort') == 'genero')
                                         <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
@@ -100,7 +100,7 @@
                             </th>
                             <th scope="col">
                                 <a
-                                    href="{{ route('libros.index', ['sort' => 'idioma', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
+                                    href="{{ route('voyager.libros.index', ['sort' => 'idioma', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">
                                     Idioma
                                     @if (request('sort') == 'idioma')
                                         <i class="fa fa-sort-{{ request('direction') == 'asc' ? 'up' : 'down' }}"></i>
@@ -126,13 +126,13 @@
                                 <td>
                                     @can('check_permission', 'read_libros')
                                         <a style="text-decoration: none"
-                                            href="{{ route('libros.read', ['libro' => $libro->id]) }}" type="button"
+                                            href="{{ route('voyager.libros.read', ['libro' => $libro->id]) }}" type="button"
                                             class="btn btn-info">Ver</a>
                                     @endcan
 
                                     @can('check_permission', 'edit_libros')
                                         <a style="text-decoration: none"
-                                            href="{{ route('libros.edit', ['libro' => $libro->id]) }}" type="button"
+                                            href="{{ route('voyager.libros.edit', ['libro' => $libro->id]) }}" type="button"
                                             class="btn btn-warning">Editar</a>
                                     @endcan
 
@@ -192,7 +192,7 @@
             // Obtén el ID del autor desde el atributo data-id
             var libroId = button.data('id');
             // Construye la URL para la eliminación
-            var actionUrl = '{{ route('libros.delete', ':id') }}';
+            var actionUrl = '{{ route('voyager.libros.delete', ':id') }}';
             actionUrl = actionUrl.replace(':id', libroId);
             // Establece la URL de acción del formulario
             var form = $(this).find('form');
