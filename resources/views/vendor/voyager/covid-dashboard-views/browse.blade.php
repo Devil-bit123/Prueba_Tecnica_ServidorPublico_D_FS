@@ -11,9 +11,6 @@
         </div>
     </div>
 
-    <p>Cantidad de datos: {{ count($data) }}</p>
-
-
     <script>
         const data = @json($data);
 
