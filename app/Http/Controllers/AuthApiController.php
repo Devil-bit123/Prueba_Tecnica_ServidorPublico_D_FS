@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use TCG\Voyager\Models\Permission;
 
 class AuthApiController extends Controller
 {
@@ -49,6 +51,31 @@ class AuthApiController extends Controller
         $request->user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+
+    public function userInfo(Request $request)
+    {
+        //$user = Auth::user()->load('role.permissions');
+        $user = Auth::user();
+        $role = $user->role;
+        $permissions = $role ? $role->permissions->pluck('key') : [];
+
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'role_id' => $user->role_id,
+                'name' => $user->name,
+                'email' => $user->email,
+                //'avatar' => $user->avatar,
+                //'email_verified_at' => $user->email_verified_at,
+                //'settings' => $user->settings,
+                //'created_at' => $user->created_at,
+                //'updated_at' => $user->updated_at,
+                'role' => $role ? $role->name : null, // Nombre del rol
+                'permissions' => $permissions // Claves de los permisos
+            ],
+        ]);
     }
 
 }

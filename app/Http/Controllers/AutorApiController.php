@@ -16,7 +16,6 @@ class AutorApiController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        //dd($request);
         $sortBy = $request->input('sort_by', 'id');
         $sortOrder = $request->input('sort_order', 'asc');
         $search = $request->input('search');
@@ -27,10 +26,12 @@ class AutorApiController extends Controller
             $query->where('nombres', 'like', "%{$search}%");
         }
 
-        $autors = $query->orderBy($sortBy, $sortOrder)->paginate(10);
+        // Obtiene todos los registros y los ordena según los parámetros
+        $autors = $query->orderBy($sortBy, $sortOrder)->get();
 
         return response()->json($autors);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -99,11 +100,11 @@ class AutorApiController extends Controller
     {
         try {
             $autor->delete();
-
-            return response()->json(null, 204);
+            return response()->json('Autor eliminado', 202);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Ocurrió un error al eliminar el autor.'
+                'message' => 'Ocurrió un error al eliminar el autor.',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
