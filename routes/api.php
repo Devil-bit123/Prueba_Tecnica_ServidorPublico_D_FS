@@ -2,12 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AutorController;
-use App\Http\Controllers\LibroController;
 use App\Http\Controllers\AuthApiController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\AutorApiController;
 use App\Http\Controllers\CovidDashboardViewController;
+use App\Http\Controllers\LibroApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +19,6 @@ use App\Http\Controllers\CovidDashboardViewController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     // Cargar las relaciones 'role' y 'permissions' en el usuario autenticado
-//     return $request->user()->load('role');
-// });
 
 Route::middleware('auth:sanctum')->get('/user', [AuthApiController::class, 'userInfo']);
 
@@ -42,11 +37,11 @@ Route::group(['prefix' => 'autores', 'middleware' => 'auth:sanctum'], function (
 });
 
 Route::group(['prefix' => 'libros', 'middleware' => 'auth:sanctum'], function () {
-    Route::get('/', [LibroController::class, 'index'])->name('api.libros.index');
-    Route::post('/', [LibroController::class, 'store'])->name('api.libros.store');
-    Route::get('/{libro}', [LibroController::class, 'show'])->name('api.libros.show');
-    Route::put('/{libro}', [LibroController::class, 'update'])->name('api.libros.update');
-    Route::delete('/{libro}', [LibroController::class, 'destroy'])->name('api.libros.destroy');
+    Route::get('/', [LibroApiController::class, 'index'])->name('api.libros.index');
+    Route::post('/', [LibroApiController::class, 'store'])->name('api.libros.store');
+    Route::get('/{libro}', [LibroApiController::class, 'show'])->name('api.libros.show');
+    Route::put('/{libro}', [LibroApiController::class, 'update'])->name('api.libros.update');
+    Route::delete('/{libro}', [LibroApiController::class, 'destroy'])->name('api.libros.destroy');
 });
 
 Route::group(['prefix' => 'covid-dashboard', 'middleware' => 'auth:sanctum'], function () {
