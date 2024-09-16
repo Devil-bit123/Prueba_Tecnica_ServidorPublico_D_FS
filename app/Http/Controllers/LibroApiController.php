@@ -9,51 +9,23 @@ use Illuminate\Validation\ValidationException;
 
 class LibroApiController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
+    /**
+     *Este método maneja la solicitud para obtener una lista de libros junto con sus autores.
+     * Utiliza Eloquent para recuperar todos los registros de libros, incluyendo la relación con el autor,
+     *y devuelve los datos en formato JSON con un código de estado 200.
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Libro::with('autor');
-
-        // Filtro de búsqueda
-        $search = $request->input('search');
-        $filter = $request->input('filter');
-        $sort = $request->input('sort', 'id');
-        $direction = $request->input('direction', 'asc');
-
-        if ($search) {
-            if ($filter === 'autor') {
-                $query->whereHas('autor', function ($q) use ($search) {
-                    $q->where('nombres', 'like', "%{$search}%");
-                });
-            } else {
-                $query->where($filter, 'like', "%{$search}%");
-            }
-        }
-
-        // Ordenamiento
-        if ($sort === 'autor') {
-            $query->join('autors', 'libros.autor_id', '=', 'autors.id')
-                ->orderBy('autors.nombres', $direction);
-        } else {
-            $query->orderBy($sort, $direction);
-        }
-
-        // Obtener los resultados paginados
-        $libros = $query->get();
-
+        $libros = Libro::with('autor')->get();
         return response()->json($libros, 200);
     }
 
+
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
+     * // Este método maneja la creación de un nuevo libro.
+     * Primero, valida los datos de la solicitud según las reglas definidas en el modelo Libro.
+     * Si la validación es exitosa, crea un nuevo registro de libro y devuelve una respuesta JSON con un mensaje de éxito y los datos del libro creado.
+     * Si ocurre un error de validación, devuelve un mensaje de error y los detalles de la validación fallida.
      */
     public function store(Request $request): JsonResponse
     {
@@ -68,10 +40,7 @@ class LibroApiController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  Libro  $libro
-     * @return JsonResponse
+     * Este método muestra un libro específico en formato JSON y devuelve una respuesta con un código de estado 200.
      */
     public function show(Libro $libro): JsonResponse
     {
@@ -79,11 +48,10 @@ class LibroApiController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Libro  $libro
-     * @return JsonResponse
+     *  Este método actualiza un objeto 'Libro' en la base de datos.
+     * Primero, valida los datos recibidos en la solicitud.
+     * Si la validación es exitosa, actualiza el objeto 'Libro' con los datos válidos y devuelve una respuesta JSON con un mensaje de éxito y el objeto actualizado.
+     * Si hay un error de validación, devuelve una respuesta JSON con los errores y un mensaje de error.
      */
     public function update(Request $request, Libro $libro): JsonResponse
     {
@@ -97,11 +65,11 @@ class LibroApiController extends Controller
         }
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Libro  $libro
-     * @return JsonResponse
+     * Este método se encarga de eliminar un libro específico.
+     * Intenta eliminar el libro y devuelve un mensaje de éxito con un código de estado 204.
+     * Si ocurre un error, captura la excepción y devuelve un mensaje de error con un código de estado 500.
      */
     public function destroy(Libro $libro): JsonResponse
     {

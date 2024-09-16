@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Http;
 class CovidDashboardViewController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Este controlador maneja la visualización del dashboard de COVID.
+     * Intenta obtener la primera instancia del dashboard y verifica su validez.
+     * Si es válido, realiza una solicitud GET a la URL del dashboard, maneja posibles errores y retorna la vista correspondiente con los datos obtenidos
+     * o un mensaje de error si la solicitud falla.
      */
 
     public function index()
@@ -46,73 +47,5 @@ class CovidDashboardViewController extends Controller
             return view('vendor.voyager.covid-dashboard-views.browse')
                 ->withErrors('Hubo un problema al conectarse a la API: ' . $e->getMessage());
         }
-    }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\CovidDashboardView  $covidDashboardView
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CovidDashboardView $covidDashboardView)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CovidDashboardView  $covidDashboardView
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CovidDashboardView $covidDashboardView)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CovidDashboardView  $covidDashboardView
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CovidDashboardView $covidDashboardView)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\CovidDashboardView  $covidDashboardView
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CovidDashboardView $covidDashboardView)
-    {
-        //
     }
 }
