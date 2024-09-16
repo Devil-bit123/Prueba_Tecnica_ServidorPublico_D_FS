@@ -62,32 +62,6 @@ class LibroApiControllerTest extends TestCase
     }
 
     /** @test */
-    // public function it_can_show_a_libro()
-    // {
-    //     // Arrange
-    //     /** @var \App\Models\User $user */
-    //     $user = User::factory()->create();
-    //     $this->actingAs($user, 'sanctum');
-
-    //     $autor = Autor::factory()->create();
-    //     $libro = Libro::factory()->create(['autor_id' => $autor->id]);
-
-    //     // Act
-    //     $response = $this->getJson("/api/libros/{$libro->id}");
-
-    //     // Assert
-    //     $response->assertStatus(200)
-    //         ->assertJson([
-    //             'id' => $libro->id,
-    //             'titulo' => $libro->titulo,
-    //             'autor_id' => $libro->autor_id,
-    //             'autor' => [
-    //                 'id' => $autor->id,
-    //                 'nombres' => $autor->nombres,
-    //                 'fechaNacimiento' => $autor->fechaNacimiento
-    //             ]
-    //         ]);
-    // }
 
     public function it_can_show_a_libro()
     {
