@@ -20,10 +20,12 @@ use App\Http\Controllers\CovidDashboardViewController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     // Cargar las relaciones 'role' y 'permissions' en el usuario autenticado
+//     return $request->user()->load('role');
+// });
 
+Route::middleware('auth:sanctum')->get('/user', [AuthApiController::class, 'userInfo']);
 
 Route::post('register', [AuthApiController::class, 'register']);
 
