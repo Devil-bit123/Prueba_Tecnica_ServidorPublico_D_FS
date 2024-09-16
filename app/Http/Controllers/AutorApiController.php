@@ -10,35 +10,21 @@ use Illuminate\Validation\ValidationException;
 class AutorApiController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Este método controla la solicitud para obtener una lista de autores.
      *
-     * @return \Illuminate\Http\Response
-     */
+     * */
     public function index(Request $request): JsonResponse
     {
-        $sortBy = $request->input('sort_by', 'id');
-        $sortOrder = $request->input('sort_order', 'asc');
-        $search = $request->input('search');
-
-        $query = Autor::query();
-
-        if ($search) {
-            $query->where('nombres', 'like', "%{$search}%");
-        }
-
-        // Obtiene todos los registros y los ordena según los parámetros
-        $autors = $query->orderBy($sortBy, $sortOrder)->get();
-
+        $autors = Autor::all();
         return response()->json($autors);
     }
 
-
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Este método maneja la creación de un nuevo autor.
+     * Valida los datos de entrada y, si son válidos, crea un nuevo registro de autor en la base de datos.
+     * Si hay errores de validación, devuelve un mensaje de error con los detalles correspondientes.
      */
+
     public function store(Request $request): JsonResponse
     {
         try {
@@ -56,24 +42,21 @@ class AutorApiController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Este método muestra un autor en formato JSON.
+     * Recibe un objeto Autor y devuelve su representación JSON como respuesta.
      */
+
     public function show(Autor $autor): JsonResponse
     {
         return response()->json($autor);
     }
 
-
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Este método actualiza un autor en la base de datos.
+     * Primero, valida los datos de entrada según las reglas definidas en la clase Autor.
+     * Si la validación es exitosa, actualiza el registro del autor y devuelve el objeto actualizado en formato JSON. Si ocurre un error de validación, devuelve un mensaje de error junto con los detalles de los errores de validación.
      */
+
     public function update(Request $request, Autor $autor): JsonResponse
     {
         try {
@@ -91,10 +74,9 @@ class AutorApiController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Este método se encarga de eliminar un autor de la base de datos.
+     * Intenta borrar el autor especificado y devuelve una respuesta JSON con un mensaje de éxito.
+     * Si ocurre un error durante el proceso, se captura la excepción y se devuelve un mensaje de error junto con el detalle de la excepción.
      */
     public function destroy(Autor $autor): JsonResponse
     {
